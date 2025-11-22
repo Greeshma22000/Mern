@@ -6,9 +6,12 @@ import todoRoutes from "./routes/todoRoutes.js"
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4002;
 
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+    // methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 app.use(express.json());
 
 app.use("/api/todos", todoRoutes);

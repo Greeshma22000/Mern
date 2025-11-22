@@ -1,42 +1,51 @@
-import Todo from "../models/Todo.js";
+import Todo from "../models/todoModels.js";
 
-export const getTodo = async (req,res) => {
+// GET ALL TODOS
+export const getTodo = async (req, res) => {
+  try {
     const todos = await Todo.find();
-    res.json(todos);
+    res.status(200).json(todos);
+  } catch (error) {
+    res.status(500).json({ error: "Server Error" });
+  }
 };
 
-export const postTodo = async(res, req) => {
-    const todo = new Todo({text: req.body.text});
-    await todo.save();
-    res.status(201).json(todo);
-}
+// CREATE TODO
+export const postTodo = async (req, res) => {
+  try {
+    const { text } = req.body;
 
-export const putTodo = async(res, req) => {
-    try {
-        const {id} = req.params;
-        const {completed} = req.body;
-        if(typeof completed === "undefined") {
-            return res.status(400).json({message: "Message completed field"});
-        }
-
-        const updatedTodo = await Todo.findByIdAndUpdate(
-            id,
-            {completed},
-            {new: true}
-        );
-
-        if(!updatedTodo) {
-            return res.status(404).json({message: "Todo not found"});
-        }
-        req.json(updatedTodo);
-    } catch (error) {
-        console.error("Update error:", error);
-        res.status(500).json({message: "Updation failed", error: error.message});
+    if (!text) {
+      return res.status(400).json({ error: "Text is required" });
     }
+
+    const todo = await Todo.create({ text });
+    res.status(201).json(todo);
+  } catch (error) {
+    console.error("POST TODO ERROR:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
+// UPDATE TODO
+export const putTodo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const todo = await Todo.findByIdAndUpdate(id, req.body, { new: true });
+
+    res.status(200).json(todo);
+  } catch (error) {
+    res.status(500).json({ error: "Error updating todo" });
+  }
+};
+
+// DELETE TODO
 export const deleteTodo = async (req, res) => {
-    const todo = await Todo.findByIdAndDelete(req.params.id);
-    if(!todo) return res.status(404).json({message: "Todo not found"});
-    res.json({message: "Todo deleted", id: req.params.id});
-}
+  try {
+    const { id } = req.params;
+    await Todo.findByIdAndDelete(id);
+    res.status(200).json({ message: "Todo deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting todo" });
+  }
+};
