@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 
 app.use("/api/users", authRoutes);
-ap.use("/api/notes", noteRoutes);
+app.use("/api/notes", noteRoutes);
 
 connectDB();
 
