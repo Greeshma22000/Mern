@@ -11,8 +11,8 @@ const App = () => {
     <div className='min-h-screen bg-purple-300'>
       <Navbar user={user} />
       <Routes>
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route path='/register' element={user ? <Navigate to="/" /> : <Register />} />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login setUser={setUser} />} />
+        <Route path='/register' element={user ? <Navigate to="/" /> : <Register setUser={setUser} />} />
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
       </Routes>
     </div>
