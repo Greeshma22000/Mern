@@ -35,7 +35,7 @@ const App = () => {
     );
   }
   return (
-    <div className='min-h-screen bg-purple-300'>
+    <div className='min-h-screen bg-purple-500'>
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login setUser={setUser} />} />
