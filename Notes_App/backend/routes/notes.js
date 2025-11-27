@@ -5,7 +5,7 @@ import {protect} from "../middleware/auth.js";
 const router = express.Router();
 
 // Get notes
-router.get("/", protect, async (res, req) => {
+router.get("/", protect, async (req, res) => {
     try {
         const notes = await Note.find({createdBy: req.user._id});
         res.json(notes);
@@ -27,7 +27,7 @@ router.post("/", protect, async(req, res) => {
             description,  
             createdBy: req.user._id,
         });
-        res.status(500).json(note);
+        res.status(201).json(note);
     } catch (error) {
         res.status(500).json({message: "Server error"});
     }
